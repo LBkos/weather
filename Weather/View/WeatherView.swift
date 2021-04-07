@@ -10,9 +10,12 @@ import URLImage
 
 struct WeatherView: View {
     @ObservedObject var vm: ViewModel
-    @FetchRequest(entity: City.entity(), sortDescriptors: [])
-    private var comment: FetchedResults<City>
+    @Environment(\.managedObjectContext) var moc
     @State var weather: Weather?
+    
+    @FetchRequest(entity: City.entity(), sortDescriptors: [])
+    private var city: FetchedResults<City>
+    
     var body: some View {
         VStack {
             if weather?.current?.condition.icon != nil {
@@ -27,22 +30,38 @@ struct WeatherView: View {
                 Text(weather?.location?.name ?? "--").font(.title)
                 Text("\(Int((weather?.current?.temp_c) ?? 0))º C").font(.largeTitle)
             }.padding()
+            //Add comment button
             Button(action: {
-                    vm.text = "Hello"
-                    vm.addItem(cityName: weather?.location?.name ?? "on")}){
-                Text("Comment")
+                vm.commentToggle.toggle()
+            }){
+                HStack {
+                    Image(systemName: "square.and.pencil")
+                    Text("Add Comment")
+                }
             }.sheet(isPresented: $vm.commentToggle, content: {
-                CommentsView(vm: vm)
+                CommentView(vm: vm, weather: weather)
             })
-            Spacer()
+            //list comments
             List {
-                ForEach(comment, id: \.self) { item in
-                    ForEach(item.commentArray) {com in
-                        VStack(alignment: .leading) {
-                            Text("\(com.text ?? "no")")
-                        }
+                ForEach(city, id: \.self) { item in
+                    if item.name == weather?.location?.name {
+                        ForEach(item.commentArray, id: \.id) { comment in
+                            HStack {
+                                Text(comment.text ?? "")
+                                    .lineLimit(4)
+                                    .multilineTextAlignment(.leading)
+                                Spacer()
+                                Image(systemName: "pencil").onTapGesture {
+                                    vm.editComment(item: comment)
+                                    vm.commentToggle.toggle()
+                                }.sheet(isPresented: $vm.commentToggle, content: {
+                                    CommentView(vm: vm, weather: weather)
+                                })
+                            }
+                        }.onDelete(perform: { offsets in
+                            vm.deleteItems(offsets: offsets, from: item, moc: moc)
+                        })
                     }
-                    
                 }.listRowBackground(Color.clear)
             }.listStyle(InsetListStyle())
         }
@@ -54,7 +73,6 @@ struct WeatherView: View {
                 .background(Color.black)
                 .ignoresSafeArea(.all)
         )
-        .onReceive(vm.timer) { self.vm.now = $0 }
     }
 }
 

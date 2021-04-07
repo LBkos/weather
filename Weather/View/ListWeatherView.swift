@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct ListWeatherView: View {
-    @ObservedObject var viewModel: ViewModel
-    @Environment(\.managedObjectContext) private var viewContext
-
+    @ObservedObject var vm: ViewModel
+    
     var body: some View {
             ScrollView {
-                ForEach(viewModel.data.indices, id: \.self) { i in
-                    RowView(viewModel: viewModel, index: i)
+                ForEach(vm.data.indices, id: \.self) { i in
+                    RowView(viewModel: vm, index: i)
                         .padding(-4)
                 }
             }.background(
                 Image("no")
                     .resizable()
                     .scaledToFill()
+                    .opacity(0.8)
                     .ignoresSafeArea()
             )
     }
@@ -28,6 +28,6 @@ struct ListWeatherView: View {
 
 struct ListWeatherView_Previews: PreviewProvider {
     static var previews: some View {
-        ListWeatherView(viewModel: ViewModel())
+        ListWeatherView(vm: ViewModel())
     }
 }

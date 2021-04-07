@@ -16,7 +16,7 @@ struct RowView: View {
         NavigationLink(destination: WeatherView(vm: viewModel, weather: viewModel.data[index]).environment(\.managedObjectContext, viewContext)) {
             ZStack {
                 Rectangle()
-                    .stroke(lineWidth: 2).foregroundColor(.clear)
+                    .stroke(lineWidth: 1).foregroundColor(.clear)
                     .frame(minWidth: 100, maxWidth: .infinity, minHeight: 100, maxHeight: 110)
                 //City name and temperature
                 HStack {

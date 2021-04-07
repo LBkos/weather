@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "22c6d31623aa58ec02ae4cd5ee35f6d5_Overcast_Skies_112_-_Fotoref_2048_1200x630_crop_center.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

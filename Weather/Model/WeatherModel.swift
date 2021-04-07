@@ -12,7 +12,6 @@ struct Weather: Codable {
     
     var location: location?
     var current: current?
-    //var id: UUID
     
 }
 struct location: Codable {
