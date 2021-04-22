@@ -10,37 +10,32 @@ import Foundation
 
 struct Weather: Codable {
     
-    var location: location?
-    var current: current?
+    var location: Location?
+    var current: Current?
     
 }
-struct location: Codable {
+struct Location: Codable {
     var name: String
     var region: String
     var country: String
-    var lat:  Float?
-    var lon:  Float?
-    var localtime_epoch: Int?
-    var localtime: String
-    
-    
-}
-struct current: Codable {
-    var last_updated_epoch: Int?
-    var last_updated: String
-    var temp_c:  Float?
-    var temp_f:  Float?
-    var lat:  Float?
-    var lon:  Float?
-    var is_day: Int
-    var condition: condition
-    var wind_kph: Float?
-    var cloud: Int
-    var vis_km: Float
 
 }
-struct condition: Codable {
+struct Current: Codable {
+    var lastUpdate: String
+    var temperatureC:  Float?
+    var condition: Condition
+    
+    private enum CodingKeys : String, CodingKey {
+            case lastUpdate = "last_updated", temperatureC = "temp_c", condition
+        }
+    
+
+}
+struct Condition: Codable {
     var text: String
     var icon: String
     var code: Int
+    private enum CodingKeys: String, CodingKey {
+        case text, icon, code
+    }
 }

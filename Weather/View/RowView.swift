@@ -22,7 +22,7 @@ struct RowView: View {
                 HStack {
                     Text(weatherVM.data[index].location?.name ?? "").font(.title)
                     Spacer()
-                    Text("\(Int(weatherVM.data[index].current?.temp_c ?? 0))º")
+                    Text("\(Int(weatherVM.data[index].current?.temperatureC ?? 0))º")
                         .font(.title)
                         .bold()
                 }

@@ -11,7 +11,7 @@ import CoreData
 protocol CommentDBProtocol {
     func saveComment(cityName: String, moc: NSManagedObjectContext)
     func editComment(item: Comment)
-    func updateComments(moc: NSManagedObjectContext)
+    func updateComment(moc: NSManagedObjectContext)
     func deleteComment(offsets: IndexSet, from city: City, moc: NSManagedObjectContext)
 }
 
@@ -19,7 +19,7 @@ class CommentViewModel: ObservableObject, CommentDBProtocol {
     
     @Published var text = ""
     @Published var commentToggle = false
-    @Published var updateComment: Comment?
+    @Published var updateComments: Comment?
     
     // Save Comments functions
     func saveComment(cityName: String, moc: NSManagedObjectContext){
@@ -34,15 +34,15 @@ class CommentViewModel: ObservableObject, CommentDBProtocol {
     }
     // Edit Comments functions
     func editComment(item: Comment) {
-        updateComment = item
-        text = updateComment?.text ?? ""
+        updateComments = item
+        text = updateComments?.text ?? ""
     }
     // Update Comments functions
-    func updateComments(moc: NSManagedObjectContext) {
-        if updateComment != nil {
-            updateComment?.text = text
+    func updateComment(moc: NSManagedObjectContext) {
+        if updateComments != nil {
+            updateComments?.text = text
             try? moc.save()
-            updateComment = nil
+            updateComments = nil
             text = ""
         }
     }
@@ -53,7 +53,9 @@ class CommentViewModel: ObservableObject, CommentDBProtocol {
                 city.removeFromComment(commentToDelete)
                 moc.delete(commentToDelete)
             }
-            if moc.hasChanges{ try? moc.save() }
+            if moc.hasChanges {
+                try? moc.save()
+            }
         
     }
     

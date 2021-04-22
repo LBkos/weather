@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct CommentView: View {
-    @ObservedObject var vm: CommentViewModel
+    @ObservedObject var commentVM: CommentViewModel
     @Environment(\.managedObjectContext) var moc
     @State var weather: Weather?
     
     var body: some View {
         NavigationView {
             VStack(alignment: .leading){
-                TextEditor(text: $vm.text)
-                    .frame(width: UIScreen.main.bounds.size.width, height: 200)
+                TextEditor(text: $commentVM.text)
+                    .frame(height: 200)
                     .border(Color.clear, width: 1)
                     .multilineTextAlignment(.leading)
                 Spacer()
-            }.padding(.all, 1)
+            }.padding(.top, 1)
             .background(Image("no")
                             .resizable()
                             .scaledToFill()
@@ -29,23 +29,23 @@ struct CommentView: View {
             .navigationBarTitle("Comment", displayMode: .inline)
             .navigationBarItems(leading:
                                     Button("Cancel"){
-                                        vm.commentToggle.toggle()
+                                        commentVM.commentToggle.toggle()
                                     }.foregroundColor(Color(.cyan))
                                 , trailing:
                                     //Save button //Update Button
                                     Button(action: {
-                                        if vm.updateComment == nil {
-                                            vm.saveComment(cityName: weather?.location?.name ?? "", moc: moc)
-                                        } else { vm.updateComments(moc: moc) }
-                                        vm.commentToggle.toggle()
+                                        if commentVM.updateComments == nil {
+                                            commentVM.saveComment(cityName: weather?.location?.name ?? "", moc: moc)
+                                        } else { commentVM.updateComment(moc: moc) }
+                                        commentVM.commentToggle.toggle()
                                     }){
-                                        if vm.updateComment == nil{
+                                        if commentVM.updateComments == nil{
                                             Text("Save")
                                         } else {
                                             Text("Update")
                                         }
-                                    }.disabled((vm.updateComment?.text == vm.text || vm.text == "") ? true : false)
-                                    .foregroundColor((vm.updateComment?.text == vm.text || vm.text == "") ? Color(.gray) : Color(.cyan)))
+                                    }.disabled((commentVM.updateComments?.text == commentVM.text || commentVM.text == "") ? true : false)
+                                    .foregroundColor((commentVM.updateComments?.text == commentVM.text || commentVM.text == "") ? Color(.gray) : Color(.cyan)))
         }.colorScheme(.dark)
         
     }
@@ -53,6 +53,6 @@ struct CommentView: View {
 
 struct CommentView_Previews: PreviewProvider {
     static var previews: some View {
-        CommentView(vm: CommentViewModel())
+        CommentView(commentVM: CommentViewModel())
     }
 }

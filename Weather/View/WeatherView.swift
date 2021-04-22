@@ -30,7 +30,7 @@ struct WeatherView: View {
             }
             VStack {
                 Text(weather?.location?.name ?? "--").font(.title)
-                Text("\(Int((weather?.current?.temp_c) ?? 0))º C").font(.largeTitle)
+                Text("\(Int((weather?.current?.temperatureC) ?? 0))º C").font(.largeTitle)
             }.padding()
             //Add comment button
             Button(action: {
@@ -41,7 +41,7 @@ struct WeatherView: View {
                     Text("Add Comment")
                 }
             }.sheet(isPresented: $commentVM.commentToggle, content: {
-                CommentView(vm: commentVM, weather: weather)
+                CommentView(commentVM: commentVM, weather: weather)
             })
             //list comments
             List {
@@ -57,7 +57,7 @@ struct WeatherView: View {
                                     commentVM.editComment(item: comment)
                                     commentVM.commentToggle.toggle()
                                 }.sheet(isPresented: $commentVM.commentToggle, content: {
-                                    CommentView(vm: commentVM, weather: weather)
+                                    CommentView(commentVM: commentVM, weather: weather)
                                 })
                             }
                         }.onDelete(perform: { offsets in
