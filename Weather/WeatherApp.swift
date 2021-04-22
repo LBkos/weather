@@ -9,13 +9,13 @@ import SwiftUI
 
 @main
 struct WeatherApp: App {
-    @ObservedObject var viewModel = ViewModel()
+    @ObservedObject var weatherVM = WeatherViewModel()
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {
         WindowGroup {
             NavigationView {
-            ListWeatherView(vm: viewModel)
+            ListWeatherView(weatherVM: weatherVM)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .preferredColorScheme(.dark)
             }.accentColor(Color(.cyan))

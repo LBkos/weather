@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CommentView: View {
-    @ObservedObject var vm: ViewModel
+    @ObservedObject var vm: CommentViewModel
     @Environment(\.managedObjectContext) var moc
     @State var weather: Weather?
     
@@ -19,10 +19,8 @@ struct CommentView: View {
                     .frame(width: UIScreen.main.bounds.size.width, height: 200)
                     .border(Color.clear, width: 1)
                     .multilineTextAlignment(.leading)
-                    .padding(.top, 20)
-                    .opacity(0.7)
                 Spacer()
-            }.padding(.all, 5)
+            }.padding(.all, 1)
             .background(Image("no")
                             .resizable()
                             .scaledToFill()
@@ -35,7 +33,6 @@ struct CommentView: View {
                                     }.foregroundColor(Color(.cyan))
                                 , trailing:
                                     //Save button //Update Button
-                                    
                                     Button(action: {
                                         if vm.updateComment == nil {
                                             vm.saveComment(cityName: weather?.location?.name ?? "", moc: moc)
@@ -56,6 +53,6 @@ struct CommentView: View {
 
 struct CommentView_Previews: PreviewProvider {
     static var previews: some View {
-        CommentView(vm: ViewModel())
+        CommentView(vm: CommentViewModel())
     }
 }

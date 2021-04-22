@@ -8,14 +8,10 @@
 import Foundation
 import Combine
 import Alamofire
-import CoreData
 
-class ViewModel: ObservableObject {
+class WeatherViewModel: ObservableObject {
     
     @Published var data = [Weather]()
-    @Published var text = ""
-    @Published var commentToggle = false
-    @Published var updateComment: Comment?
     @Published var parameters = ["barnaul", "paris", "moscow", "London"]
     
     // apiKey = "88a1f4f26c7d49538cd95323211903"
@@ -41,41 +37,6 @@ class ViewModel: ObservableObject {
                 data.append(item)
              }).store(in: &bag)
         }
-    }
-    // Save Comments functions
-    func saveComment(cityName: String, moc: NSManagedObjectContext){
-            let comment = Comment(context: moc)
-            comment.text = text
-            comment.city = City(context: moc)
-            comment.city?.name = cityName
-            comment.city?.comment = NSSet(object: comment)
-            
-            try? moc.save()
-            text = ""
-    }
-    // Edit Comments functions
-    func editComment(item: Comment) {
-        updateComment = item
-        text = updateComment?.text ?? ""
-    }
-    // Update Comments functions
-    func updateComments(moc: NSManagedObjectContext) {
-        if updateComment != nil {
-            updateComment?.text = text
-            try? moc.save()
-            updateComment = nil
-            text = ""
-        }
-    }
-    // Delete Comments functions
-    func deleteItems(offsets: IndexSet, from city: City, moc: NSManagedObjectContext) {
-            for offset in offsets.sorted().reversed() {
-                let commentToDelete = city.commentArray[offset]
-                city.removeFromComment(commentToDelete)
-                moc.delete(commentToDelete)
-            }
-            if moc.hasChanges{ try? moc.save() }
-        
     }
     
     init() {

@@ -9,7 +9,9 @@ import SwiftUI
 import URLImage
 
 struct WeatherView: View {
-    @ObservedObject var vm: ViewModel
+    @ObservedObject var weatherVM: WeatherViewModel
+    @ObservedObject var commentVM = CommentViewModel()
+
     @Environment(\.managedObjectContext) var moc
     @State var weather: Weather?
     
@@ -32,14 +34,14 @@ struct WeatherView: View {
             }.padding()
             //Add comment button
             Button(action: {
-                vm.commentToggle.toggle()
+                commentVM.commentToggle.toggle()
             }){
                 HStack {
                     Image(systemName: "square.and.pencil")
                     Text("Add Comment")
                 }
-            }.sheet(isPresented: $vm.commentToggle, content: {
-                CommentView(vm: vm, weather: weather)
+            }.sheet(isPresented: $commentVM.commentToggle, content: {
+                CommentView(vm: commentVM, weather: weather)
             })
             //list comments
             List {
@@ -52,14 +54,14 @@ struct WeatherView: View {
                                     .multilineTextAlignment(.leading)
                                 Spacer()
                                 Image(systemName: "pencil").onTapGesture {
-                                    vm.editComment(item: comment)
-                                    vm.commentToggle.toggle()
-                                }.sheet(isPresented: $vm.commentToggle, content: {
-                                    CommentView(vm: vm, weather: weather)
+                                    commentVM.editComment(item: comment)
+                                    commentVM.commentToggle.toggle()
+                                }.sheet(isPresented: $commentVM.commentToggle, content: {
+                                    CommentView(vm: commentVM, weather: weather)
                                 })
                             }
                         }.onDelete(perform: { offsets in
-                            vm.deleteItems(offsets: offsets, from: item, moc: moc)
+                            commentVM.deleteComment(offsets: offsets, from: item, moc: moc)
                         })
                     }
                 }.listRowBackground(Color.clear)
@@ -78,6 +80,6 @@ struct WeatherView: View {
 
 struct WeatherView_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherView(vm: ViewModel())
+        WeatherView(weatherVM: WeatherViewModel())
     }
 }

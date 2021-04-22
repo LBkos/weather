@@ -9,20 +9,20 @@ import SwiftUI
 
 struct RowView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @ObservedObject var viewModel: ViewModel
+    @ObservedObject var weatherVM: WeatherViewModel
     @State var index: Int
     var body: some View {
         
-        NavigationLink(destination: WeatherView(vm: viewModel, weather: viewModel.data[index]).environment(\.managedObjectContext, viewContext)) {
+        NavigationLink(destination: WeatherView(weatherVM: weatherVM, weather: weatherVM.data[index]).environment(\.managedObjectContext, viewContext)) {
             ZStack {
                 Rectangle()
                     .stroke(lineWidth: 1).foregroundColor(.clear)
                     .frame(minWidth: 100, maxWidth: .infinity, minHeight: 100, maxHeight: 110)
                 //City name and temperature
                 HStack {
-                    Text(viewModel.data[index].location?.name ?? "").font(.title)
+                    Text(weatherVM.data[index].location?.name ?? "").font(.title)
                     Spacer()
-                    Text("\(Int(viewModel.data[index].current?.temp_c ?? 0))º")
+                    Text("\(Int(weatherVM.data[index].current?.temp_c ?? 0))º")
                         .font(.title)
                         .bold()
                 }
@@ -30,10 +30,10 @@ struct RowView: View {
                 .foregroundColor(.white)
                 
             }.background(
-                Image(viewModel.data[index].current?.condition.text ?? "cloud")
+                Image(weatherVM.data[index].current?.condition.text ?? "cloud")
                     .resizable()
                     .frame(minWidth: 100, maxWidth: .infinity, minHeight: 100, maxHeight: 110)
-                    .scaledToFill()
+                    .scaledToFit()
                     .opacity(0.8)
                     .background(Color.black)
             )
@@ -44,6 +44,6 @@ struct RowView: View {
 
 struct RowView_Previews: PreviewProvider {
     static var previews: some View {
-        RowView(viewModel: ViewModel(), index: 0)
+        RowView(weatherVM: WeatherViewModel(), index: 0)
     }
 }
