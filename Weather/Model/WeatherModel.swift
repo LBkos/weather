@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct Weather: Codable {
     
     var location: Location?
@@ -35,6 +34,7 @@ struct Condition: Codable {
     var text: String
     var icon: String
     var code: Int
+    
     private enum CodingKeys: String, CodingKey {
         case text, icon, code
     }

@@ -31,9 +31,8 @@ struct RowView: View {
                 
             }.background(
                 Image(weatherVM.data[index].current?.condition.text ?? "cloud")
-                    .resizable()
                     .frame(minWidth: 100, maxWidth: .infinity, minHeight: 100, maxHeight: 110)
-                    .scaledToFit()
+                    .clipShape(Rectangle())
                     .opacity(0.8)
                     .background(Color.black)
             )

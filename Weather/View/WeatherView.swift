@@ -20,8 +20,8 @@ struct WeatherView: View {
     
     var body: some View {
         VStack {
-            if weather?.current?.condition.icon != nil {
-                URLImage(url: URL(string: ("https:\((weather?.current?.condition.icon)!)"))!) { image in
+            if let icon = weather?.current?.condition.icon {
+                URLImage(url: URL(string: ("https:\((icon))"))!) { image in
                     image
                         .resizable()
                         .frame(width: 60, height: 60)
